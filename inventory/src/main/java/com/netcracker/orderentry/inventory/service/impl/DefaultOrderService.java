@@ -40,12 +40,24 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public Order getOrder(int orderId){
-        return orderRepository.findOne(orderId);
+    public Order getOrder(int orderId) throws OrderNotFoundException {
+
+        Order order = orderRepository.findOne(orderId);
+
+        if(order == null){
+            throw new OrderNotFoundException("Order with id = "+orderId+ " was not found.");
+        }
+
+        return order;
     }
 
     @Override
-    public void deleteOrder(int orderId){
+    public void deleteOrder(int orderId) throws OrderNotFoundException {
+
+        if(!orderRepository.exists(orderId)){
+            throw new OrderNotFoundException("Order with id = "+orderId+ " was not found.");
+        }
+
         orderRepository.delete(orderId);
     }
 
@@ -56,8 +68,12 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void updateOrder(Order order, int orderId){
+    public Order updateOrder(Order order, int orderId) throws OrderNotFoundException {
         Order storedOrder = orderRepository.findOne(orderId);
+
+        if(storedOrder == null){
+            throw new OrderNotFoundException("Order with id = " + orderId + " was not found");
+        }
 
         storedOrder.setEmail(order.getEmail());
         storedOrder.setOrderDate(order.getOrderDate());
@@ -66,7 +82,7 @@ public class DefaultOrderService implements OrderService {
         storedOrder.setPaid(order.isPaid());
         storedOrder.setTotalPrice(order.getTotalPrice());
 
-        orderRepository.save(storedOrder);
+        return orderRepository.save(storedOrder);
     }
 
     @Override
@@ -105,7 +121,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void payForOrder(int orderId) throws OrderNotFoundException, OrderPaidException {
+    public Order payForOrder(int orderId) throws OrderNotFoundException, OrderPaidException {
 
         if(!orderRepository.exists(orderId)){
             throw new OrderNotFoundException("Order with id = " + orderId + " was not found");
@@ -118,7 +134,7 @@ public class DefaultOrderService implements OrderService {
         }
 
         order.setPaid(true);
-        orderRepository.save(order);
+        return orderRepository.save(order);
 
     }
 }

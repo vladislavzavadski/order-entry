@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "tag")
 public class Tag {
+
     @Id
     @GeneratedValue
     @Column(name = "tag_id")
@@ -42,20 +43,5 @@ public class Tag {
 
     public void setOfferList(List<Offer> offerList) {
         this.offerList = offerList;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Tag tag = (Tag) o;
-
-        return tag.getId().equals(id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
     }
 }

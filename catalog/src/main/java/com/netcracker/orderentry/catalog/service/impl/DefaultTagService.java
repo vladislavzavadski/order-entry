@@ -3,6 +3,7 @@ package com.netcracker.orderentry.catalog.service.impl;
 import com.netcracker.orderentry.catalog.domain.Tag;
 import com.netcracker.orderentry.catalog.repository.TagRepository;
 import com.netcracker.orderentry.catalog.service.TagService;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,24 +28,40 @@ public class DefaultTagService implements TagService {
     }
 
     @Override
-    public Tag getTag(int tagId){
+    public Tag getTag(int tagId) throws NotFoundException {
+        Tag tag = tagRepository.findOne(tagId);
+
+        if(tag == null){
+            throw new NotFoundException("Tag with id = " + tagId + " was not found");
+        }
+
         return tagRepository.findOne(tagId);
     }
 
     @Override
-    public void deleteTag(int tagId){
+    public void deleteTag(int tagId) throws NotFoundException {
+
+        if(!tagRepository.exists(tagId)){
+            throw new NotFoundException("Tag with id = " + tagId + " was not found");
+        }
+
         tagRepository.delete(tagId);
     }
 
     @Override
-    public void updateTag(Tag tag, int tagId) {
-        Tag tag1 = tagRepository.findOne(tagId);
-        tag1.setValue(tag.getValue());
-        tagRepository.save(tag1);
+    public Tag updateTag(Tag tag, int tagId) throws NotFoundException {
+        Tag storedTag = tagRepository.findOne(tagId);
+
+        if(!tagRepository.exists(tagId)){
+            throw new NotFoundException("Tag with id = " + tagId + " was not found");
+        }
+
+        storedTag.setValue(tag.getValue());
+        return tagRepository.save(storedTag);
     }
 
     @Override
-    public void createTag(List<Tag> tagList){
-        tagRepository.save(tagList);
+    public List<Tag> createTag(List<Tag> tagList){
+        return tagRepository.save(tagList);
     }
 }

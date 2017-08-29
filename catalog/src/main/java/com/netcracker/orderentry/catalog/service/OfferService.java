@@ -4,6 +4,7 @@ import com.netcracker.orderentry.catalog.domain.Category;
 import com.netcracker.orderentry.catalog.domain.Filter;
 import com.netcracker.orderentry.catalog.domain.Offer;
 import com.netcracker.orderentry.catalog.domain.Tag;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 
 import java.util.List;
 
@@ -15,17 +16,17 @@ public interface OfferService {
 
     List<Offer> findAllOffers(int limit, int startFrom);
 
-    void setTag(Tag tag, int offerId);
+    Offer setTag(Tag tag, int offerId) throws NotFoundException;
 
-    void deleteTag(Tag tag, int offerId);
+    void deleteTag(Tag tag, int offerId) throws NotFoundException;
 
-    void changeCategory(Category category, int offerId);
+    Offer changeCategory(Category category, int offerId) throws NotFoundException;
 
-    Offer getOffer(int offerId);
+    Offer getOffer(int offerId) throws NotFoundException;
 
-    void updateOffer(Offer offer, int offerId);
+    Offer updateOffer(Offer offer, int offerId) throws NotFoundException;
 
-    void deleteOffer(int offerId);
+    void deleteOffer(int offerId) throws NotFoundException;
 
     List<Offer> searchOffers(Filter filter);
 }

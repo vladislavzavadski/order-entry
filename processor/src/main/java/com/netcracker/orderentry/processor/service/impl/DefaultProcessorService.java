@@ -2,6 +2,7 @@ package com.netcracker.orderentry.processor.service.impl;
 
 import com.netcracker.orderentry.processor.domain.OrderItem;
 import com.netcracker.orderentry.processor.service.ProcessorService;
+import com.netcracker.orderentry.processor.service.impl.exception.OfferNotFoundException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderAlreadyPaidException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderItemNotFoundException;
 import com.netcracker.orderentry.processor.service.util.OfferClient;
@@ -57,7 +58,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
-    public List<Order> getOrdersByEmail(String email, int page, int limit){
+    public List<Order> getOrdersByEmail(String email, int page, int limit) throws OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.getOrdersByEmail \n email: "+email+"\n page: "+page+" \nlimit: "+limit);
 
@@ -71,7 +72,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
-    public List<Order> getOrdersByPaidStatus(boolean paid, int page, int limit){
+    public List<Order> getOrdersByPaidStatus(boolean paid, int page, int limit) throws OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.getOrdersByPaidStatus \n isPaid: "+paid+"\n page: "+page+" \nlimit: "+limit);
 
@@ -112,12 +113,13 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
-    public Order getOrder(int orderId){
+    public Order getOrder(int orderId) throws OrderNotFoundException, OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.getOrder \n orderId: "+orderId);
-        Order order = orderClient.getOrder(orderServiceUrl + orderId);
-        order.getOrderItemList().forEach(orderItem ->
-                orderItem.setOffer(offerClient.getSingleOffer(offerServiceUrl + orderItem.getOfferId())));
+        Order order = orderClient.getOrder(orderServiceUrl, orderId);
+
+        fillOrderItems(order.getOrderItemList());
+
         return order;
     }
 
@@ -133,10 +135,10 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
-    public OrderItem addOrderItem(OrderItem orderItem){
+    public OrderItem addOrderItem(OrderItem orderItem) throws OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.addOrderItem \n orderItem: "+orderItem);
-        Offer offer = offerClient.getSingleOffer(offerServiceUrl + orderItem.getOfferId());
+        Offer offer = offerClient.getSingleOffer(offerServiceUrl, orderItem.getOfferId());
         orderItem.setPrice(offer.getPrice());
 
         return orderClient.createOrderItem(orderItemUrl, orderItem);
@@ -146,16 +148,23 @@ public class DefaultProcessorService implements ProcessorService {
     public void deleteOrderItem(int orderItemId) throws OrderItemNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.deleteOrderItem \n orderItemId: "+orderItemId);
-        orderClient.deleteOrderItem(orderItemUrl + orderItemId);
+        orderClient.deleteOrderItem(orderItemUrl, orderItemId);
     }
 
-    private List<Order> searchOrders(Map<String, String> params){
+    private List<Order> searchOrders(Map<String, String> params) throws OfferNotFoundException {
         List<Order> orders = orderClient.getOrders(orderServiceUrl, params);
 
-        orders.forEach((order) -> order.getOrderItemList().forEach(orderItem ->
-                orderItem.setOffer(offerClient.getSingleOffer(offerServiceUrl + orderItem.getOfferId()))));
+        for (Order order : orders){
+            fillOrderItems(order.getOrderItemList());
+        }
 
         return orders;
+    }
+
+    private void fillOrderItems(List<OrderItem> orderItems) throws OfferNotFoundException {
+        for (OrderItem orderItem : orderItems){
+            orderItem.setOffer(offerClient.getSingleOffer(offerServiceUrl, orderItem.getOfferId()));
+        }
     }
 
 }

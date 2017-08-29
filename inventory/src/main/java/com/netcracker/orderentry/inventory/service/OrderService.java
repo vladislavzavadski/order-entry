@@ -13,13 +13,13 @@ public interface OrderService {
 
     OrderItem createOrderItem(OrderItem orderItem);
 
-    Order getOrder(int orderId);
+    Order getOrder(int orderId) throws OrderNotFoundException;
 
-    void deleteOrder(int orderId);
+    void deleteOrder(int orderId) throws OrderNotFoundException;
 
     List<Order> getOrders(int limit, int page);
 
-    void updateOrder(Order order, int orderId);
+    Order updateOrder(Order order, int orderId) throws OrderNotFoundException;
 
     List<Order> searchOrdersByEmail(String email, int page, int limit);
 
@@ -31,5 +31,5 @@ public interface OrderService {
 
     double getTotalPrice(String email);
 
-    void payForOrder(int orderId) throws OrderNotFoundException, OrderPaidException;
+    Order payForOrder(int orderId) throws OrderNotFoundException, OrderPaidException;
 }

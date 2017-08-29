@@ -1,6 +1,7 @@
 package com.netcracker.orderentry.processor.controller;
 
 import com.netcracker.orderentry.processor.service.ProcessorService;
+import com.netcracker.orderentry.processor.service.impl.exception.OfferNotFoundException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderAlreadyPaidException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderItemNotFoundException;
 import com.netcracker.orderentry.processor.domain.Order;
@@ -27,13 +28,13 @@ public class ProcessorController {
 
     @RequestMapping(value = "/order/email", method = RequestMethod.GET, params = {"email", "page", "limit"})
     public List<Order> getOrdersByEmail(@RequestParam("email") String email, @RequestParam("page") int page,
-                                        @RequestParam("limit") int limit){
+                                        @RequestParam("limit") int limit) throws OfferNotFoundException {
         return processorService.getOrdersByEmail(email, page, limit);
     }
 
     @RequestMapping(value = "/order", method = RequestMethod.GET, params = {"paid", "page", "limit"})
     public List<Order> getOrderByPaidStatus(@RequestParam("paid") boolean paid, @RequestParam("page") int page,
-                                             @RequestParam("limit") int limit){
+                                             @RequestParam("limit") int limit) throws OfferNotFoundException {
         return processorService.getOrdersByPaidStatus(paid, page, limit);
     }
 
@@ -53,7 +54,7 @@ public class ProcessorController {
     }
 
     @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)
-    public Order getOrder(@PathVariable("orderId") int orderId){
+    public Order getOrder(@PathVariable("orderId") int orderId) throws OrderNotFoundException, OfferNotFoundException {
         return processorService.getOrder(orderId);
     }
 
@@ -63,13 +64,19 @@ public class ProcessorController {
     }
 
     @RequestMapping(value = "/order/item", method = RequestMethod.POST)
-    public OrderItem createOrderItem(@RequestBody OrderItem orderItem){
+    public OrderItem createOrderItem(@RequestBody OrderItem orderItem) throws OfferNotFoundException {
         return processorService.addOrderItem(orderItem);
     }
 
     @RequestMapping(value = "/order/item/{orderItemId}", method = RequestMethod.DELETE)
     public void deleteOrderItem(@PathVariable("orderItemId") int orderItemId) throws OrderItemNotFoundException {
         processorService.deleteOrderItem(orderItemId);
+    }
+
+    @ExceptionHandler(OfferNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String offerNotFoundExceptionHandler(OfferNotFoundException ex){
+        return "Offer not found";
     }
 
     @ExceptionHandler(OrderItemNotFoundException.class)

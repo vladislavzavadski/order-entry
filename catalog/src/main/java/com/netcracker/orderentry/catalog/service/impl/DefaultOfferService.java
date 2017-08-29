@@ -6,6 +6,7 @@ import com.netcracker.orderentry.catalog.domain.Offer;
 import com.netcracker.orderentry.catalog.domain.Tag;
 import com.netcracker.orderentry.catalog.repository.OfferRepository;
 import com.netcracker.orderentry.catalog.service.OfferService;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,41 +40,74 @@ public class DefaultOfferService implements OfferService {
     }
 
     @Override
-    public void setTag(Tag tag, int offerId){
-        Offer offer1 = offerRepository.findOne(offerId);
-        offer1.getTags().add(tag);
-        offerRepository.save(offer1);
-    }
-
-    @Override
-    public void deleteTag(Tag tag, int offerId){
-        Offer offer1 = offerRepository.findOne(offerId);
-        offer1.getTags().remove(tag);
-        offerRepository.save(offer1);
-    }
-
-    @Override
-    public void changeCategory(Category category, int offerId){
+    public Offer setTag(Tag tag, int offerId) throws NotFoundException {
         Offer offer = offerRepository.findOne(offerId);
-        offer.setCategory(category);
+
+        if(offer == null){
+            throw new NotFoundException("Offer with id = " + offerId + " was not found");
+        }
+
+        offer.getTags().add(tag);
+        return offerRepository.save(offer);
+    }
+
+    @Override
+    public void deleteTag(Tag tag, int offerId) throws NotFoundException {
+        Offer offer = offerRepository.findOne(offerId);
+
+        if(offer == null){
+            throw new NotFoundException("Offer with id = " + offerId + " was not found");
+        }
+
+        offer.getTags().removeIf(tag1 -> tag1.getId() == tag.getId());
         offerRepository.save(offer);
     }
 
     @Override
-    public Offer getOffer(int offerId){
-        return offerRepository.findOne(offerId);
+    public Offer changeCategory(Category category, int offerId) throws NotFoundException {
+        Offer offer = offerRepository.findOne(offerId);
+
+        if(offer == null){
+            throw new NotFoundException("Offer with id = " + offerId + " was not found");
+        }
+
+        offer.setCategory(category);
+        return offerRepository.save(offer);
+
     }
 
     @Override
-    public void updateOffer(Offer offer, int offerId){
-        Offer offer1 = offerRepository.findOne(offerId);
-        offer1.setName(offer.getName());
-        offer1.setPrice(offer.getPrice());
-        offerRepository.save(offer1);
+    public Offer getOffer(int offerId) throws NotFoundException {
+        Offer offer = offerRepository.findOne(offerId);
+
+        if(offer == null){
+            throw new NotFoundException("Offer with id="+offerId+ " was not found");
+        }
+
+        return offer;
     }
 
     @Override
-    public void deleteOffer(int offerId){
+    public Offer updateOffer(Offer offer, int offerId) throws NotFoundException {
+        Offer storedOffer = offerRepository.findOne(offerId);
+
+        if(!offerRepository.exists(offerId)){
+            throw new NotFoundException("Offer with id="+offerId+ " was not found");
+        }
+
+        storedOffer.setName(offer.getName());
+        storedOffer.setPrice(offer.getPrice());
+
+        return offerRepository.save(storedOffer);
+    }
+
+    @Override
+    public void deleteOffer(int offerId) throws NotFoundException {
+
+        if(!offerRepository.exists(offerId)){
+            throw new NotFoundException("Offer with id="+offerId+ " was not found");
+        }
+
         offerRepository.delete(offerId);
     }
 

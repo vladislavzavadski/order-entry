@@ -3,6 +3,7 @@ package com.netcracker.orderentry.catalog.service.impl;
 import com.netcracker.orderentry.catalog.domain.Category;
 import com.netcracker.orderentry.catalog.repository.CategoryRepository;
 import com.netcracker.orderentry.catalog.service.CategoryService;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,25 +29,41 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     @Override
-    public Category getCategory(int categoryId){
-        return categoryRepository.findOne(categoryId);
+    public Category getCategory(int categoryId) throws NotFoundException {
+        Category category = categoryRepository.findOne(categoryId);
+
+        if (category == null){
+            throw new NotFoundException("Category with id = "+categoryId+" was not found.");
+        }
+
+        return category;
     }
 
     @Override
-    public void deleteCategory(int categoryId){
+    public void deleteCategory(int categoryId) throws NotFoundException {
+
+        if(!categoryRepository.exists(categoryId)){
+            throw new NotFoundException("Category with id = " + categoryId + " was not found");
+        }
+
         categoryRepository.delete(categoryId);
     }
 
     @Override
-    public void updateCategory(Category category, int categoryId) {
-        Category category1 = categoryRepository.findOne(categoryId);
-        category1.setName(category.getName());
-        categoryRepository.save(category1);
+    public Category updateCategory(Category category, int categoryId) throws NotFoundException {
+        Category storedCategory = categoryRepository.findOne(categoryId);
+
+        if(storedCategory == null){
+            throw new NotFoundException("Category with id = " + categoryId + " was not found");
+        }
+
+        storedCategory.setName(category.getName());
+        return categoryRepository.save(storedCategory);
     }
 
     @Override
-    public List<Integer> createCategory(List<Category> categories){
-        return categoryRepository.save(categories).stream().map(Category::getId).collect(Collectors.toList());
+    public List<Category> createCategory(List<Category> categories){
+        return categoryRepository.save(categories);
     }
 
 }

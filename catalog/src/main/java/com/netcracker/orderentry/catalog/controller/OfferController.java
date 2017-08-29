@@ -5,6 +5,7 @@ import com.netcracker.orderentry.catalog.domain.Filter;
 import com.netcracker.orderentry.catalog.domain.Offer;
 import com.netcracker.orderentry.catalog.domain.Tag;
 import com.netcracker.orderentry.catalog.service.OfferService;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,8 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/offer", method = RequestMethod.POST)
-    public void createOffer(@RequestBody Offer offer){
-        offerService.createOffer(offer);
+    public Offer createOffer(@RequestBody Offer offer){
+        return offerService.createOffer(offer);
     }
 
     @RequestMapping(value = "/offer", method = RequestMethod.GET)
@@ -34,32 +35,32 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.PUT)
-    public void updateOffer(@RequestBody Offer offer, @PathVariable("offerId") int offerId){
-        offerService.updateOffer(offer, offerId);
+    public Offer updateOffer(@RequestBody Offer offer, @PathVariable("offerId") int offerId) throws NotFoundException {
+        return offerService.updateOffer(offer, offerId);
     }
 
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.GET)
-    public Offer getOffer(@PathVariable("offerId") int offerId){
+    public Offer getOffer(@PathVariable("offerId") int offerId) throws NotFoundException {
         return offerService.getOffer(offerId);
     }
 
     @RequestMapping(value = "/offer/tag/{offerId}", method = RequestMethod.PUT)
-    public void setTag(@RequestBody Tag tag, @PathVariable("offerId") int offerId){
-        offerService.setTag(tag, offerId);
+    public Offer setTag(@RequestBody Tag tag, @PathVariable("offerId") int offerId) throws NotFoundException {
+        return offerService.setTag(tag, offerId);
     }
 
     @RequestMapping(value = "/offer/tag/{offerId}", method = RequestMethod.DELETE)
-    public void deleteTag(@RequestBody Tag tag, @PathVariable("offerId") int offerId){
+    public void deleteTag(@RequestBody Tag tag, @PathVariable("offerId") int offerId) throws NotFoundException {
         offerService.deleteTag(tag, offerId);
     }
 
     @RequestMapping(value = "/offer/category/{offerId}", method = RequestMethod.PUT)
-    public void changeCategory(@RequestBody Category category, @PathVariable("offerId") int offerId){
-        offerService.changeCategory(category, offerId);
+    public Offer changeCategory(@RequestBody Category category, @PathVariable("offerId") int offerId) throws NotFoundException {
+        return offerService.changeCategory(category, offerId);
     }
 
     @RequestMapping(value = "/offer/{offerId}", method = RequestMethod.DELETE)
-    public void deleteOffer(@PathVariable("offerId") int offerId){
+    public void deleteOffer(@PathVariable("offerId") int offerId) throws NotFoundException {
         offerService.deleteOffer(offerId);
     }
 

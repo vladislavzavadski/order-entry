@@ -32,7 +32,7 @@ public class Order {
     @Column(name = "or_paid")
     private boolean paid;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
     @JsonManagedReference
     private List<OrderItem> orderItemList;
 

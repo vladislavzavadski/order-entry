@@ -21,11 +21,11 @@ public interface OrderClient {
 
     double getTotalPrice(String stringUri, Map<String, String> params);
 
-    Order getOrder(String stringUri);
+    Order getOrder(String stringUri, int orderId) throws OrderNotFoundException;
 
     Order createOrder(String stringUri, Order order);
 
     OrderItem createOrderItem(String stringUri, OrderItem orderItem);
 
-    void deleteOrderItem(String stringUri) throws OrderItemNotFoundException;
+    void deleteOrderItem(String stringUri, int orderItemId) throws OrderItemNotFoundException;
 }

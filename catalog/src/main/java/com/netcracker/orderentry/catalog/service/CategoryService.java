@@ -1,6 +1,7 @@
 package com.netcracker.orderentry.catalog.service;
 
 import com.netcracker.orderentry.catalog.domain.Category;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 
 import java.util.List;
 
@@ -10,11 +11,11 @@ import java.util.List;
 public interface CategoryService {
     Category createCategory(Category category);
 
-    Category getCategory(int categoryId);
+    Category getCategory(int categoryId) throws NotFoundException;
 
-    void deleteCategory(int categoryId);
+    void deleteCategory(int categoryId) throws NotFoundException;
 
-    void updateCategory(Category category, int categoryId);
+    Category updateCategory(Category category, int categoryId) throws NotFoundException;
 
-    List<Integer> createCategory(List<Category> categories);
+    List<Category> createCategory(List<Category> categories);
 }

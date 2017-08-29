@@ -1,6 +1,7 @@
 package com.netcracker.orderentry.catalog.service;
 
 import com.netcracker.orderentry.catalog.domain.Tag;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 
 import java.util.List;
 
@@ -10,11 +11,11 @@ import java.util.List;
 public interface TagService {
     Tag createTag(Tag tag);
 
-    Tag getTag(int tagId);
+    Tag getTag(int tagId) throws NotFoundException;
 
-    void deleteTag(int tagId);
+    void deleteTag(int tagId) throws NotFoundException;
 
-    void updateTag(Tag tag, int tagId);
+    Tag updateTag(Tag tag, int tagId) throws NotFoundException;
 
-    void createTag(List<Tag> tagList);
+    List<Tag> createTag(List<Tag> tagList);
 }

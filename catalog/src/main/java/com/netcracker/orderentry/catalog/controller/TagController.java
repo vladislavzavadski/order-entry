@@ -2,6 +2,7 @@ package com.netcracker.orderentry.catalog.controller;
 
 import com.netcracker.orderentry.catalog.domain.Tag;
 import com.netcracker.orderentry.catalog.service.TagService;
+import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,28 +22,28 @@ public class TagController {
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.POST)
-    public void createTag(@RequestBody Tag tag){
-        tagService.createTag(tag);
+    public Tag createTag(@RequestBody Tag tag){
+        return tagService.createTag(tag);
     }
 
     @RequestMapping(value = "/tag/{tagId}", method = RequestMethod.GET)
-    public Tag getTag(@PathVariable("tagId") int tagId){
+    public Tag getTag(@PathVariable("tagId") int tagId) throws NotFoundException {
         return tagService.getTag(tagId);
     }
 
     @RequestMapping(value = "/tag/{tagId}", method = RequestMethod.PUT)
-    public void updateTag(@RequestBody Tag tag, @PathVariable("tagId") int tagId) {
-        tagService.updateTag(tag, tagId);
+    public Tag updateTag(@RequestBody Tag tag, @PathVariable("tagId") int tagId) throws NotFoundException {
+        return tagService.updateTag(tag, tagId);
     }
 
     @RequestMapping(value = "/tag/{tagId}", method = RequestMethod.DELETE)
-    public void deleteTag(@PathVariable("tagId") int tagId){
+    public void deleteTag(@PathVariable("tagId") int tagId) throws NotFoundException {
         tagService.deleteTag(tagId);
     }
 
     @RequestMapping(value = "/tag/list", method = RequestMethod.POST)
-    public void createTag(@RequestBody List<Tag> tags){
-        tagService.createTag(tags);
+    public List<Tag> createTag(@RequestBody List<Tag> tags){
+        return tagService.createTag(tags);
     }
 
 }

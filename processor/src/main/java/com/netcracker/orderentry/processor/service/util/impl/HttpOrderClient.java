@@ -68,9 +68,23 @@ public class HttpOrderClient implements OrderClient {
     }
 
     @Override
-    public Order getOrder(String stringUri){
-        URI uri = UrlUtil.buildUri(stringUri);
-        return restTemplate.getForObject(uri, Order.class);
+    public Order getOrder(String stringUri, int orderId) throws OrderNotFoundException {
+        URI uri = UrlUtil.buildUri(stringUri + orderId);
+
+        RequestEntity<Order> requestEntity = new RequestEntity<Order>(HttpMethod.GET, uri);
+
+        try {
+            ResponseEntity<Order> responseEntity = restTemplate.exchange(requestEntity, Order.class);
+            return responseEntity.getBody();
+        }
+        catch (HttpClientErrorException ex){
+            if(ex.getStatusCode() == HttpStatus.NOT_FOUND){
+                throw new OrderNotFoundException("Order with id = " + orderId + " was not found");
+            }
+            else {
+                throw ex;
+            }
+        }
     }
 
     @Override
@@ -87,8 +101,8 @@ public class HttpOrderClient implements OrderClient {
     }
 
     @Override
-    public void deleteOrderItem(String stringUri) throws OrderItemNotFoundException {
-        URI uri = UrlUtil.buildUri(stringUri);
+    public void deleteOrderItem(String stringUri, int orderItemId) throws OrderItemNotFoundException {
+        URI uri = UrlUtil.buildUri(stringUri + orderItemId);
         try {
             restTemplate.delete(uri);
         }

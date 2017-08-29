@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,12 +37,12 @@ public class OrderController {
     @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)
     @ApiOperation("Get the order with specific ID")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = Order.class)})
-    public Order getOrder(@PathVariable("orderId") int orderId){
+    public Order getOrder(@PathVariable("orderId") int orderId) throws OrderNotFoundException {
         return orderService.getOrder(orderId);
     }
 
     @RequestMapping(value = "/order/{orderId}", method = RequestMethod.DELETE)
-    public void deleteOrder(@PathVariable("orderId") int orderId){
+    public void deleteOrder(@PathVariable("orderId") int orderId) throws OrderNotFoundException {
         orderService.deleteOrder(orderId);
     }
 
@@ -51,8 +52,8 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/order", method = RequestMethod.PUT)
-    public void updateOrder(@RequestBody Order order, @PathVariable("orderId") int orderId){
-        orderService.updateOrder(order, orderId);
+    public Order updateOrder(@RequestBody Order order, @PathVariable("orderId") int orderId) throws OrderNotFoundException {
+        return orderService.updateOrder(order, orderId);
     }
 
     @RequestMapping(value = "/order", method = RequestMethod.GET, params = {"email", "page", "limit"})
@@ -68,8 +69,8 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/order/pay/{orderId}", method = RequestMethod.PUT)
-    public void payForOrder(@PathVariable("orderId") int orderId) throws OrderNotFoundException, OrderPaidException {
-        orderService.payForOrder(orderId);
+    public Order payForOrder(@PathVariable("orderId") int orderId) throws OrderNotFoundException, OrderPaidException {
+        return orderService.payForOrder(orderId);
     }
 
     @RequestMapping(value = "/order/count", method = RequestMethod.GET, params = {"email"})
