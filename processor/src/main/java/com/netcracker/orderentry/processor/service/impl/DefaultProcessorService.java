@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,8 +131,9 @@ public class DefaultProcessorService implements ProcessorService {
         order.setPaid(false);
         order.setTotalPrice(0.0);
         order.setOrderItemCount(0);
+        order.setOrderDate(new Date());
 
-        return orderClient.createOrder(offerServiceUrl, order);
+        return orderClient.createOrder(orderServiceUrl, order);
     }
 
     @Override

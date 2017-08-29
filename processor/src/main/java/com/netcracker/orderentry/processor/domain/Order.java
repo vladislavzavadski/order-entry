@@ -1,5 +1,7 @@
 package com.netcracker.orderentry.processor.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class Order {
 
     private int orderItemCount;
 
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd MMM yyyy")
     private Date orderDate;
 
     private boolean paid;
