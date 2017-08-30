@@ -27,7 +27,7 @@ public class ProcessorController {
     }
 
     @RequestMapping(value = "/order/email", method = RequestMethod.GET, params = {"email", "page", "limit"})
-    public List<Order> getOrdersByEmail(@RequestParam("email") String email, @RequestParam("page") int page,
+    public List<Order> getOrdersByEmail(@RequestParam(value = "email") String email, @RequestParam("page") int page,
                                         @RequestParam("limit") int limit) throws OfferNotFoundException {
         return processorService.getOrdersByEmail(email, page, limit);
     }

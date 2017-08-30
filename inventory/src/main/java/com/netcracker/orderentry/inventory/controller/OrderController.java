@@ -51,7 +51,7 @@ public class OrderController {
         return orderService.getOrders(limit, page);
     }
 
-    @RequestMapping(value = "/order", method = RequestMethod.PUT)
+    @RequestMapping(value = "/order/{orderId}", method = RequestMethod.PUT)
     public Order updateOrder(@RequestBody Order order, @PathVariable("orderId") int orderId) throws OrderNotFoundException {
         return orderService.updateOrder(order, orderId);
     }
@@ -95,7 +95,7 @@ public class OrderController {
 
     @ExceptionHandler(value = {OrderNotFoundException.class, OrderItemNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void orderNotFoundExceptionHandler(OrderNotFoundException ex){}
+    public void orderNotFoundExceptionHandler(Exception ex){}
 
     @ExceptionHandler(OrderPaidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

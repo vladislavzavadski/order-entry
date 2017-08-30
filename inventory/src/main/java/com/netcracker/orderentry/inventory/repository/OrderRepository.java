@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    @Query("select sum(o.orderItemCount) from Order o where o.email = ?1")
+    @Query("select count (o) from Order o where o.email = ?1")
     int selectOrdersCountByEmail(String email);
 
     @Query("select sum(o.totalPrice) from Order o where o.email = ?1")

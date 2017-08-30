@@ -1,6 +1,7 @@
 package com.netcracker.orderentry.inventory.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -27,6 +28,7 @@ public class Order {
     private int orderItemCount;
 
     @Column(name = "order_date")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd MMM yyyy")
     private Date orderDate;
 
     @Column(name = "or_paid")

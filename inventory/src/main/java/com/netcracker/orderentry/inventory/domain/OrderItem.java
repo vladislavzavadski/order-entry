@@ -15,7 +15,7 @@ public class OrderItem implements Serializable{
     @Column(name = "oi_id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "or_id", nullable = false)
     @JsonBackReference
     private Order order;

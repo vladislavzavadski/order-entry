@@ -17,7 +17,7 @@ public class Tag {
     @Column(name = "tag_value")
     private String value;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
     @JsonIgnore
     private List<Offer> offerList;
 

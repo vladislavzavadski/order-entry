@@ -15,7 +15,7 @@ public class OrderItem implements Serializable{
     private Offer offer;
     private double price;
 
-    @JsonIgnore
+    //@JsonIgnore
     private int offerId;
 
     public Order getOrder() {

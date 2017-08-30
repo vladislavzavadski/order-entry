@@ -103,9 +103,16 @@ public class DefaultOrderService implements OrderService {
         if(!orderItemRepository.exists(orderItemId)){
             throw new OrderItemNotFoundException("Order item with id=" + orderItemId + " was not found");
         }
-        if(orderItemRepository.findOne(orderItemId).getOrder().isPaid()){
+
+        OrderItem orderItem = orderItemRepository.findOne(orderItemId);
+
+        if(orderItem.getOrder().isPaid()){
             throw new OrderPaidException("Order already paid");
         }
+
+        Order order = orderItem.getOrder();
+        order.setOrderItemCount(order.getOrderItemCount() - 1);
+        order.setTotalPrice(order.getTotalPrice() - orderItem.getPrice());
 
         orderItemRepository.delete(orderItemId);
     }

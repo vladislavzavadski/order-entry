@@ -140,9 +140,9 @@ public class DefaultProcessorService implements ProcessorService {
     public OrderItem addOrderItem(OrderItem orderItem) throws OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.addOrderItem \n orderItem: "+orderItem);
-        Offer offer = offerClient.getSingleOffer(offerServiceUrl, orderItem.getOfferId());
+        Offer offer = offerClient.getSingleOffer(offerServiceUrl, orderItem.getOffer().getId());
         orderItem.setPrice(offer.getPrice());
-
+        orderItem.setOfferId(orderItem.getOffer().getId());
         return orderClient.createOrderItem(orderItemUrl, orderItem);
     }
 
