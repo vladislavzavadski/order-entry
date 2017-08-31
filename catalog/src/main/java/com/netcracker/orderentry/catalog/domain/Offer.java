@@ -22,7 +22,7 @@ public class Offer {
     @JoinColumn(name = "cat_id", nullable = false)
     private Category category;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "offer_tag", joinColumns = {@JoinColumn(name = "of_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     private List<Tag> tags;
