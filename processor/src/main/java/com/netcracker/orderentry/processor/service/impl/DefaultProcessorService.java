@@ -1,18 +1,19 @@
 package com.netcracker.orderentry.processor.service.impl;
 
-import com.netcracker.orderentry.processor.domain.OrderItem;
+import com.netcracker.orderentry.processor.domain.to.OrderItem;
 import com.netcracker.orderentry.processor.service.ProcessorService;
 import com.netcracker.orderentry.processor.service.impl.exception.OfferNotFoundException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderAlreadyPaidException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderItemNotFoundException;
-import com.netcracker.orderentry.processor.service.util.OfferClient;
-import com.netcracker.orderentry.processor.service.util.OrderClient;
-import com.netcracker.orderentry.processor.domain.Offer;
-import com.netcracker.orderentry.processor.domain.Order;
+import com.netcracker.orderentry.processor.client.OfferClient;
+import com.netcracker.orderentry.processor.client.OrderClient;
+import com.netcracker.orderentry.processor.domain.to.Offer;
+import com.netcracker.orderentry.processor.domain.to.Order;
 import com.netcracker.orderentry.processor.service.ParamName;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -59,6 +60,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<Order> getOrdersByEmail(String email, int page, int limit) throws OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.getOrdersByEmail \n email: "+email+"\n page: "+page+" \nlimit: "+limit);
@@ -73,6 +75,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<Order> getOrdersByPaidStatus(boolean paid, int page, int limit) throws OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.getOrdersByPaidStatus \n isPaid: "+paid+"\n page: "+page+" \nlimit: "+limit);
@@ -87,6 +90,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public void payForOrder(int orderId) throws OrderAlreadyPaidException, OrderNotFoundException {
         LOGGER.info("\nMethod: DefaultProcessorService.payForOrder \n orderId: "+orderId);
 
@@ -94,6 +98,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public int getOrderCountByEmail(String email){
 
         LOGGER.info("\nMethod: DefaultProcessorService.getOrderCountByEmail \n email: "+email);
@@ -104,6 +109,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public double getTotalOrderPriceByEmail(String email){
 
         LOGGER.info("\nMethod: DefaultProcessorService.getTotalOrderPriceByEmail \n email: "+email);
@@ -114,6 +120,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public Order getOrder(int orderId) throws OrderNotFoundException, OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.getOrder \n orderId: "+orderId);
@@ -125,6 +132,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public Order createOrder(Order order){
 
         LOGGER.info("\nMethod: DefaultProcessorService.createOrder \n order: "+order);
@@ -137,6 +145,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public OrderItem addOrderItem(OrderItem orderItem) throws OfferNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.addOrderItem \n orderItem: "+orderItem);
@@ -147,6 +156,7 @@ public class DefaultProcessorService implements ProcessorService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public void deleteOrderItem(int orderItemId) throws OrderItemNotFoundException {
 
         LOGGER.info("\nMethod: DefaultProcessorService.deleteOrderItem \n orderItemId: "+orderItemId);

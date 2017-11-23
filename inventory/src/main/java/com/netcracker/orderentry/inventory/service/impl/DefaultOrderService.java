@@ -10,11 +10,13 @@ import com.netcracker.orderentry.inventory.service.exception.OrderNotFoundExcept
 import com.netcracker.orderentry.inventory.service.exception.OrderPaidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 public class DefaultOrderService implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;

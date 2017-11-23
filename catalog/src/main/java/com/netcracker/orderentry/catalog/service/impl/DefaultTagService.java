@@ -5,6 +5,7 @@ import com.netcracker.orderentry.catalog.repository.TagRepository;
 import com.netcracker.orderentry.catalog.service.TagService;
 import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class DefaultTagService implements TagService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public Tag createTag(Tag tag){
         return tagRepository.save(tag);
     }
@@ -39,6 +41,7 @@ public class DefaultTagService implements TagService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public void deleteTag(int tagId) throws NotFoundException {
 
         if(!tagRepository.exists(tagId)){
@@ -49,6 +52,7 @@ public class DefaultTagService implements TagService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public Tag updateTag(Tag tag, int tagId) throws NotFoundException {
         Tag storedTag = tagRepository.findOne(tagId);
 
@@ -61,6 +65,7 @@ public class DefaultTagService implements TagService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public List<Tag> createTag(List<Tag> tagList){
         return tagRepository.save(tagList);
     }

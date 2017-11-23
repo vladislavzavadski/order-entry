@@ -1,7 +1,5 @@
-package com.netcracker.orderentry.processor.domain;
+package com.netcracker.orderentry.processor.domain.to;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 

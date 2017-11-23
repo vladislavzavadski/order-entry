@@ -1,7 +1,7 @@
 package com.netcracker.orderentry.processor.service;
 
-import com.netcracker.orderentry.processor.domain.Order;
-import com.netcracker.orderentry.processor.domain.OrderItem;
+import com.netcracker.orderentry.processor.domain.to.Order;
+import com.netcracker.orderentry.processor.domain.to.OrderItem;
 import com.netcracker.orderentry.processor.service.impl.exception.OfferNotFoundException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderAlreadyPaidException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderItemNotFoundException;

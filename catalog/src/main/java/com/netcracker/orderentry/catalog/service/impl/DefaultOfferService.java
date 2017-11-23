@@ -10,6 +10,7 @@ import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class DefaultOfferService implements OfferService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public Offer createOffer(Offer offer){
         return offerRepository.save(offer);
     }
@@ -40,6 +42,7 @@ public class DefaultOfferService implements OfferService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public Offer setTag(Tag tag, int offerId) throws NotFoundException {
         Offer offer = offerRepository.findOne(offerId);
 
@@ -52,6 +55,7 @@ public class DefaultOfferService implements OfferService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public void deleteTag(Tag tag, int offerId) throws NotFoundException {
         Offer offer = offerRepository.findOne(offerId);
 
@@ -64,6 +68,7 @@ public class DefaultOfferService implements OfferService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public Offer changeCategory(Category category, int offerId) throws NotFoundException {
         Offer offer = offerRepository.findOne(offerId);
 
@@ -88,6 +93,7 @@ public class DefaultOfferService implements OfferService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public Offer updateOffer(Offer offer, int offerId) throws NotFoundException {
         Offer storedOffer = offerRepository.findOne(offerId);
 
@@ -102,6 +108,7 @@ public class DefaultOfferService implements OfferService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public void deleteOffer(int offerId) throws NotFoundException {
 
         if(!offerRepository.exists(offerId)){

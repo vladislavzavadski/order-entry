@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Configuration
 @SpringBootApplication
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Main {
 
     public static void main(String[] args) {

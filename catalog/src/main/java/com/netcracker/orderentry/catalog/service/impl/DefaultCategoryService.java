@@ -5,6 +5,7 @@ import com.netcracker.orderentry.catalog.repository.CategoryRepository;
 import com.netcracker.orderentry.catalog.service.CategoryService;
 import com.netcracker.orderentry.catalog.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public void deleteCategory(int categoryId) throws NotFoundException {
 
         if(!categoryRepository.exists(categoryId)){
@@ -50,6 +52,7 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public Category updateCategory(Category category, int categoryId) throws NotFoundException {
         Category storedCategory = categoryRepository.findOne(categoryId);
 
@@ -62,6 +65,7 @@ public class DefaultCategoryService implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated() and hasAnyRole('ROLE_ADMIN')")
     public List<Category> createCategory(List<Category> categories){
         return categoryRepository.save(categories);
     }

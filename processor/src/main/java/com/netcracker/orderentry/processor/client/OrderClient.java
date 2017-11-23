@@ -1,7 +1,7 @@
-package com.netcracker.orderentry.processor.service.util;
+package com.netcracker.orderentry.processor.client;
 
-import com.netcracker.orderentry.processor.domain.Order;
-import com.netcracker.orderentry.processor.domain.OrderItem;
+import com.netcracker.orderentry.processor.domain.to.Order;
+import com.netcracker.orderentry.processor.domain.to.OrderItem;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderAlreadyPaidException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderItemNotFoundException;
 import com.netcracker.orderentry.processor.service.impl.exception.OrderNotFoundException;
@@ -28,4 +28,6 @@ public interface OrderClient {
     OrderItem createOrderItem(String stringUri, OrderItem orderItem);
 
     void deleteOrderItem(String stringUri, int orderItemId) throws OrderItemNotFoundException;
+
+    List<String> authenticate(String username, String password);
 }

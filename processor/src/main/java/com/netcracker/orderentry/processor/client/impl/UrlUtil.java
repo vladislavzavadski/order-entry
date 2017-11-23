@@ -1,4 +1,4 @@
-package com.netcracker.orderentry.processor.service.util.impl;
+package com.netcracker.orderentry.processor.client.impl;
 
 import org.springframework.web.util.UriComponentsBuilder;
 

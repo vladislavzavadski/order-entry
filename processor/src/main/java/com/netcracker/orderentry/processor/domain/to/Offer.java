@@ -1,4 +1,4 @@
-package com.netcracker.orderentry.processor.domain;
+package com.netcracker.orderentry.processor.domain.to;
 
 
 import java.util.List;
